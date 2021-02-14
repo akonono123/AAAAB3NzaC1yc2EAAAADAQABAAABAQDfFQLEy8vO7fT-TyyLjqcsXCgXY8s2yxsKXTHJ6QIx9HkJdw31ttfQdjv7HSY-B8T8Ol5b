@@ -1,35 +1,69 @@
 package com.bootcamp.springboot.controller;
 
 import com.bootcamp.springboot.model.TodoList;
-import com.bootcamp.springboot.service.TodoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
-@RequestMapping("/todo")
 public class TodoController {
 
-    private TodoService  todoService;
+public Map<String, TodoList> todmap= new HashMap<>();
+public ModelAndView modView= new ModelAndView();
 
-    @Autowired
-    public TodoController(TodoService  todoService) {
 
-      this.todoService=todoService;
+    public TodoController(){
+    todmap.put("1",(new TodoList("1", "Wake up")));
+    todmap.put("2",(new TodoList("2", "Drink water")));
+    todmap.put("3",(new TodoList("3", "Do some exercise")));
+}
+
+    @GetMapping("/TodList")
+    public ModelAndView List(Model model) {
+
+         model.addAttribute("items", todmap.values());
+        modView.setViewName("todolist");
+        return modView;
+    }
+    @GetMapping("/Additem")
+    public ModelAndView insertItem() {
+
+        modView.setViewName("AddItem");
+        return modView;
     }
 
-    @GetMapping("/list")
-    ResponseEntity<List<TodoList>> index() {
-        List<TodoList> item = this.todoService.AddItems();
 
+    @PostMapping("/Additem")
+    public ModelAndView insertItem(@ModelAttribute("insetItem") TodoList todo,Model model) {
+       todmap.put(todo.getItemId(),todo);
+        model.addAttribute("items", todmap.values());
+        modView.setViewName("todolist");
+        return modView;
+    }
+    @GetMapping("/EditItem/{id}")
+    public ModelAndView editItem(@PathVariable("id") String itemId, Model model) {
 
-        return new ResponseEntity<>(item, HttpStatus.OK);
+        model.addAttribute("editItems", todmap.get(itemId));
+        modView.setViewName("editItems");
+        return modView;
+    }
+    @PostMapping("/EditItem/{id}")
+    public ModelAndView editItem(@PathVariable("id") String itemId, Model model,@ModelAttribute("insetItem") TodoList todo) {
+        todmap.put(todo.getItemId(),todo);
+        model.addAttribute("items", todmap.get(itemId));
+        modView.setViewName("todolist");
+        return modView;
+    }
+    @GetMapping("/DeleteItem/{id}")
+    public ModelAndView delItem(@PathVariable("id") String itemId, Model model) {
+        todmap.remove(itemId);
+        model.addAttribute("items", todmap.values());
+        modView.setViewName("todolist");
+        return modView;
     }
 
 }

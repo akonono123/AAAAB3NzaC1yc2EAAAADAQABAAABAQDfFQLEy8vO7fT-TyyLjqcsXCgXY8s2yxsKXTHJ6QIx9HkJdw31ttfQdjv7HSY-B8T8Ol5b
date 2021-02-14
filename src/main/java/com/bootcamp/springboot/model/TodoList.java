@@ -1,20 +1,24 @@
 package com.bootcamp.springboot.model;
 
 public class TodoList {
-    private int itemId;
+    private String itemId;
     private String name;
 
+    public TodoList(){
+        super();
+    }
 
-    public TodoList(int itemID,String name){
+    public TodoList(String itemID,String name){
+        super();
         this.itemId=itemID;
         this.name=name;
     }
 
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 
@@ -25,4 +29,6 @@ public class TodoList {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }

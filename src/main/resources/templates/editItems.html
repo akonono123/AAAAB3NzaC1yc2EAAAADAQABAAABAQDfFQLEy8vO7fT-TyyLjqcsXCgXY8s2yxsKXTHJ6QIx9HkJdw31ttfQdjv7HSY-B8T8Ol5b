@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div align="center">
+    <div>
+        <h4>Edit form</h4>
+    </div>
+    <hr>
+    <form th:action="@{/EditItem/{id}(id=${editItems.itemId})}" th:object="${editItems}"  method="post">
+        <table>
+            <tr>
+                <td>Item ID</td>
+                <td><input type="text" name="itemId" th:field="${editItems.itemId}" readonly ></td>
+            </tr>
+            <tr>
+                <td>Item Name</td>
+                <td><input type="text" name="name"  th:field="${editItems.name}"></td>
+            </tr>
+        </table>
+        <input type="submit" value="Save">
+    </form>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div align="center">
+    <div>
+        <a th:href="@{/Additem}">Add</a>  <br/>
+    </div>
+    <table>
+        <thead>
+        <th>Id</th>
+        <th>Item</th>
+        </thead>
+        <tbody>
+        <tr th:each="res:${items}">
+            <td th:text="${res.itemId}"></td>
+            <td th:text="${res.name}"></td>
+            <td>  <a th:href="@{/EditItem/{id}(id=${res.itemId})}">Edit</a>
+                <a th:href="@{/DeleteItem/{id}(id=${res.itemId})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div align="center">
+    <div>
+        <h4>Add a task Form</h4>
+    </div>
+    <hr>
+    <form th:action="@{/Additem}" th:object="${insertItem}" method="post">
+        <table>
+            <tr>
+                <td>Item ID</td>
+                <td><input type="text" name="itemId"></td>
+            </tr>
+            <tr>
+                <td>Item Name</td>
+                <td><input type="text" name="name"></td>
+            </tr>
+        </table>
+        <input type="submit" value="Add">
+    </form>
+
+</div>
+</body>
+</html>
