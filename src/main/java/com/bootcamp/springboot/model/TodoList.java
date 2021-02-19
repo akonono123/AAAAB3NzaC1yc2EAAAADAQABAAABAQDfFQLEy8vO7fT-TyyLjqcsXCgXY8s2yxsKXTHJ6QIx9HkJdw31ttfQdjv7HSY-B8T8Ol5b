@@ -1,25 +1,34 @@
 package com.bootcamp.springboot.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="Sample_tbl")
 public class TodoList {
-    private String itemId;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(name="task_name")
     private String name;
+
 
     public TodoList(){
         super();
     }
 
-    public TodoList(String itemID,String name){
+    public TodoList(long id,String name){
         super();
-        this.itemId=itemID;
+        this.id=id;
         this.name=name;
     }
-
-    public String getItemId() {
-        return itemId;
+    public long getId() {
+        return id;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

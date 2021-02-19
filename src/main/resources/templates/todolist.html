@@ -4,28 +4,238 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css} "/>
 
+<script type="text/javascript"  th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<!--<script type="text/javascript"  th:src="@{/webjars/datatables/1.10.19/js/jquery.dataTables.min.js}"></script>
+<link rel="stylesheet" th:href="@{/webjars/datatables/1.10.19/css/jquery.dataTables.min.css} "/>-->
+<script type="text/javascript"  th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"></script>
+
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.0/css/jquery.dataTables.css "/>
+<script type="text/javascript"  src="http://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
 <body>
-<div align="center">
-    <div>
-        <a th:href="@{/Additem}">Add</a>  <br/>
-    </div>
-    <table>
-        <thead>
-        <th>Id</th>
-        <th>Item</th>
-        </thead>
-        <tbody>
-        <tr th:each="res:${items}">
-            <td th:text="${res.itemId}"></td>
-            <td th:text="${res.name}"></td>
-            <td>  <a th:href="@{/EditItem/{id}(id=${res.itemId})}">Edit</a>
-                <a th:href="@{/DeleteItem/{id}(id=${res.itemId})}">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<hr/>
+<br/>
+<div class="panel panel-primary">
+    <div class="panel-heading"><h2>Todo App</h2> </div>
+    <div class="panel-body ">
 
+<div class="row">
+
+
+    <div class="col-md-4">
+        <br/>
+        <h3>Form</h3>
+       <div id="crud_form" >
+
+
+       </div>
+
+    </div>
+
+    <div class="col-md-8" align="center">
+        <br/>
+        <h3>Task(s)</h3>
+        <table  id="table" class="mdl-data-table display compact table-condensed nowrap" style="width:100%">
+            <thead>
+            <th>Task Id</th>
+            <th>Task </th>
+            <th></th>
+            <th></th>
+            </thead>
+          <tbody></tbody>
+        </table>
+
+
+</div>
+
+</div>
+</div>
 </div>
 </body>
 </html>
+<script>
+    $(document).ready(function() {
+        list();
+        loadformADD();
+     function loadformADD(){
+           $("#crud_form").empty();
+            var frm=' <form>\n' +
+                '               <div class="form-group">\n' +
+                '                   <label for="itemId">Item ID:</label>\n' +
+                '                   <input type="text" class="form-control" placeholder="Enter Id" name="itemId" id="itemId">\n' +
+                '               </div>\n' +
+                '               <div class="form-group">\n' +
+                '                   <label for="name">Item Name:</label>\n' +
+                '                   <input type="text" class="form-control" placeholder="Enter task name" name="name" id="name">\n' +
+                '               </div>\n' +
+                '\n' +
+                '               <button type="submit" class="btn btn-primary" id="add">Submit</button>\n' +
+                '           </form>'
+           $("#crud_form").append(frm);
+         addbtn()
+       }
+        function loadformEdit(data){
+            $("#crud_form").empty();
+            var frm=' <form>\n' +
+                '               <div class="form-group">\n' +
+                '                   <input type="text" class="form-control"  name="itemId" id="itemId" value="'+data.itemId+'" hidden>\n' +
+                '               </div>\n' +
+                '               <div class="form-group">\n' +
+                '                   <label for="name">Item Name:</label>\n' +
+                '                   <input type="text" class="form-control"  name="name" id="name"  value="'+data.name+'">\n' +
+                '               </div>\n' +
+                '\n' +
+                '               <button type="submit" class="btn btn-primary" id="save">Save</button>\n' +
+                '           </form>'
+            $("#crud_form").append(frm);
+            savebtn()
+        }
+
+
+        function list(){
+            let tabdate=[];
+
+            $.ajax({
+                url: '/getalldata',
+                type: "GET",
+
+                success: function (data) {
+
+                    $.each(data, function (i, item) {
+
+                        tabdate.push({
+                            no:i + 1,
+                            id:item.id,
+                            name:item.task_name,
+                        })
+
+                    });
+
+                    $('#table').dataTable({
+                        "data": tabdate,
+                        "bDestroy": true,
+                        "columns": [
+                            { "data": "no" },
+                            { "data": "name" },
+                            {  "data": "id",
+                                "visible":false,
+                            },
+                            {  "data": null,
+                                "defaultContent": "<button class='btn btn-info btn-sm' id='btn1' value='{id}'>Edit</button> <button class='btn btn-danger btn-sm' id='btn2'>Delete</button>"
+                            },
+                        ]
+                    });
+
+                }
+            });
+    console.log(tabdate)
+        }
+
+
+
+        $('#table tbody').on('click', '#btn1', function () {
+            var id = $(this).closest("tr");
+            var ids =  $('#table').DataTable().row(id).data();
+            var final=ids["id"]
+            seledit(final);
+
+
+        });
+        $('#table tbody').on('click', '#btn2', function () {
+            var id = $(this).closest("tr");
+            var ids =  $('#table').DataTable().row(id).data();
+            var final=ids["id"]
+            deledit(final)
+
+
+
+        });
+
+        function seledit(final){
+           $("#crud_form").empty();
+
+            $.ajax({
+                url: '/selItem/'+ final,
+                type: "GET",
+
+                success: function (data) {
+                    console.log(data)
+                        loadformEdit(data)
+                }
+            });
+        }
+        function deledit(final){
+
+            $.ajax({
+                url: '/DeleteItem/'+ final,
+                type: "GET",
+
+                success: function (data) {
+                   alert("success");
+                   list();
+                }
+            });
+        }
+    function addbtn(){
+        $("#add").on("click",function (e) {
+            e.preventDefault();
+            console.log("btn1");
+            var formdata={
+                itemId:$("#itemId").val(),
+                name:$("#name").val(),
+            }
+            console.log(formdata);
+            $.ajax({
+                url: '/Additem',
+                type: "POST",
+                data:JSON.stringify(formdata),
+                contentType:'application/json',
+                success: function (data) {
+                    if(data=="success"){
+                        alert("Success");
+                        list()
+
+                    }
+
+                }
+            });
+        })
+    }
+
+        function savebtn(){
+            $("#save").on("click",function (a) {
+                a.preventDefault();
+                console.log("btn2");
+                var formdata={
+                    itemId:$("#itemId").val(),
+                    name:$("#name").val(),
+                }
+                console.log(formdata);
+                 $.ajax({
+                     url: '/EditItem/'+formdata.itemId,
+                     type: "POST",
+                     data:JSON.stringify(formdata),
+                     contentType:'application/json',
+                     success: function (data) {
+                         if(data=="ok"){
+                             alert("Success");
+                             list()
+                             loadformADD()
+                         }
+
+                     }
+                 });
+            })
+
+        }
+
+
+
+
+
+
+
+
+    } );
+</script>
