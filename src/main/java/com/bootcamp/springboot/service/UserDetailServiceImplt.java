@@ -24,14 +24,14 @@ public class UserDetailServiceImplt implements UserDetailsService {
 @Autowired
  private UserService userService;
     @Override
-    public UserDetails loadUserByUsername(String Username) throws UsernameNotFoundException{
-       Users user =  userService.findByUsername(Username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+       Users user =  userService.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Username " + Username + " not found.");
+            throw new UsernameNotFoundException("Username " + username + " not found.");
         } else if (!user.isActive()) {
             throw new BadCredentialsException("User is not active");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUser(),user.getPass(),loadAuthorities(user));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),loadAuthorities(user));
     }
 
     private Collection<? extends GrantedAuthority> loadAuthorities(Users user) {

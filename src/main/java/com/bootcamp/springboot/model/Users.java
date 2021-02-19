@@ -11,61 +11,40 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name="username")
-    private String user;
-    @Column(name="password")
-    private String pass;
-    @Column(name="active")
+    private String username;
+    private String password;
+
     private boolean active;
 
 
-
-    @ManyToMany(fetch= FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name="USER_ROLES",
-            joinColumns = @JoinColumn(name="USER_ID"),
-            inverseJoinColumns = @JoinColumn(name="ROLE_ID")
+            name = "user_roles",
+
+            joinColumns = @JoinColumn(name = "user_Id"),
+            inverseJoinColumns = @JoinColumn(name = "role_Id")
     )
-    private Set<Role> roles=new HashSet<>();
-    public Users(){}
+    private Set<Role> roles = new HashSet<>();
 
-    public Set<Role> getRoles() {
-        return roles;
+
+    public Users(){};
+
+
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Users(long id, String user, String pass, boolean active) {
-        this.id = id;
-        this.user = user;
-        this.pass = pass;
-        this.active = active;
+    public String getPassword() {
+        return password;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isActive() {
@@ -73,6 +52,22 @@ public class Users {
     }
 
     public void setActive(boolean active) {
-        this.active = active;
+        active = active;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

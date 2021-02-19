@@ -10,11 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 @Configuration
 @EnableWebSecurity
-
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -40,23 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/assets/**").permitAll()
-                .antMatchers("/actuator/health/**").permitAll()
-                .antMatchers("/actuator/**").hasRole("SUPERUSER")
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .failureUrl("/login")
-                .defaultSuccessUrl("/", true)
-                .and()
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .addLogoutHandler(new SecurityContextLogoutHandler()))
-                .sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/login");
+                .defaultSuccessUrl("/todo/list",true)
+        ;
 
     }
 }

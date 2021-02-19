@@ -13,8 +13,8 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public Users findByUsername(String Username){
-        return  userRepository.findbyUsername(Username);
+    public Users findByUsername(String username){
+        return  userRepository.findByUsername(username);
     }
     public Optional<Users> findbyId(Long id){
        return userRepository.findById(id);
