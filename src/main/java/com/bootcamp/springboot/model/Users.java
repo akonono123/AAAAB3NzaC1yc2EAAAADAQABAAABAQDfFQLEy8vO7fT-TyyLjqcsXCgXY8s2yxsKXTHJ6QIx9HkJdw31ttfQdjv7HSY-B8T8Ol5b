@@ -17,6 +17,16 @@ public class Users {
     private boolean active;
 
 
+    public long getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(long roleid) {
+        this.roleid = roleid;
+    }
+
+    private long roleid;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -51,7 +61,7 @@ public class Users {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(int active) {
         active = active;
     }
 

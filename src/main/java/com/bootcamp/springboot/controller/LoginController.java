@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LoginController {
     // Login form
-    @RequestMapping("/login.html")
+    @RequestMapping("/login")
     public String login() {
-        return "login.html";
+        return "login";
     }
 
     // Login form with error
-    @RequestMapping("/login-error.html")
+    @RequestMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
-        return "login.html";
+        return "login";
     }
 }

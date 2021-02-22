@@ -4,19 +4,18 @@ import com.bootcamp.springboot.model.TodoList;
 import com.bootcamp.springboot.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 
 @RestController
 public class TodoController {
 
-public Map<Integer, TodoList> todmap= new HashMap<>();
+/*public Map<Integer, TodoList> todmap= new HashMap<>();*/
 public ModelAndView modView= new ModelAndView();
 
     @Qualifier("todoService")
@@ -38,11 +37,11 @@ public ModelAndView modView= new ModelAndView();
     }
 
     @GetMapping("/getalldata")
-    public Collection<TodoList> list() {
+    public ResponseEntity<Collection<TodoList>> list() {
         Collection<TodoList> data = todService.getTodo();
 
 
-        return data;
+        return ResponseEntity.ok(data);
     }
 
     @GetMapping("/Additem")
@@ -56,9 +55,15 @@ public ModelAndView modView= new ModelAndView();
     @PostMapping("/Additem")
     public String insertItem(@RequestBody TodoList todo) {
 
-      todService.saveData(todo);
+        String msg="";
+      if (todo == null){
+        msg = "error";
+      }else{
+          todService.saveData(todo);
+       msg="success";
+      }
 
-        return "success";
+        return msg;
     }
     @GetMapping("/selItem/{id}")
     public Optional<TodoList> editItem(@PathVariable("id") long itemId) {
@@ -68,15 +73,25 @@ public ModelAndView modView= new ModelAndView();
     }
     @PostMapping("/EditItem/{id}")
     public String editItem(@PathVariable("id") long itemId,@RequestBody TodoList todo) {
-        todService.saveData(todo);
+        String msg="";
+        if (todo == null){
+            msg = "error";
+        }else{
+            todService.saveData(todo);
+            msg="success";
+        }
 
-        return "ok";
+
+        return msg;
     }
     @GetMapping("/DeleteItem/{id}")
     public String delItem(@PathVariable("id") long itemId) {
-     todService.Deldata(itemId);
 
-        return "ok";
+            todService.Deldata(itemId);
+            String msg="success";
+
+
+        return msg;
     }
 
 }

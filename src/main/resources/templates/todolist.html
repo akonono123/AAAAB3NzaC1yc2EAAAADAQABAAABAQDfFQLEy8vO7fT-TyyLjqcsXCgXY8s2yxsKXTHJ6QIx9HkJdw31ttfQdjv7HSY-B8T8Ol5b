@@ -14,26 +14,30 @@
 <link rel="stylesheet" href="http://cdn.datatables.net/1.10.0/css/jquery.dataTables.css "/>
 <script type="text/javascript"  src="http://cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
 <body>
+<a th:href="@{/UserIndex}">Users</a>
 <hr/>
 <br/>
-<div class="panel panel-primary">
-    <div class="panel-heading"><h2>Todo App</h2> </div>
-    <div class="panel-body ">
-
-<div class="row" align="center">
 
 
-    <div class="col-md-4">
-        <br/>
-        <h3>Form</h3>
-       <div id="crud_form" >
+<div class="row" >
+
+    <div class="row" align="center">
+        <div class="col-lg-12 "  style="width: 100%;display: inline-block">
+
+            <br/>
+            <h3>Form</h3>
+            <div id="crud_form" class="col-md-12">
 
 
-       </div>
+            </div>
 
-    </div>
+                    </div>
 
-    <div class="col-md-8" align="center">
+                </div>
+
+
+
+    <div class="col-lg-8" align="center">
         <br/>
         <h3>Task(s)</h3>
         <table  id="table" class="mdl-data-table display compact table-condensed nowrap" style="width:100%">
@@ -43,15 +47,17 @@
             <th></th>
             <th></th>
             </thead>
-          <tbody></tbody>
+            <tbody></tbody>
         </table>
 
 
-</div>
+    </div>
+
+
+
 
 </div>
-</div>
-</div>
+
 </body>
 </html>
 <script>
@@ -61,10 +67,10 @@
      function loadformADD(){
            $("#crud_form").empty();
             var frm=' <form>\n' +
-                '               <div class="form-group">\n' +
+             /*   '               <div class="form-group">\n' +
                 '                   <label for="itemId">Item ID:</label>\n' +
                 '                   <input type="text" class="form-control" placeholder="Enter Id" name="itemId" id="itemId">\n' +
-                '               </div>\n' +
+                '               </div>\n' +*/
                 '               <div class="form-group">\n' +
                 '                   <label for="name">Item Name:</label>\n' +
                 '                   <input type="text" class="form-control" placeholder="Enter task name" name="name" id="name">\n' +
@@ -77,9 +83,10 @@
        }
         function loadformEdit(data){
             $("#crud_form").empty();
+            console.log(data)
             var frm=' <form>\n' +
                 '               <div class="form-group">\n' +
-                '                   <input type="text" class="form-control"  name="itemId" id="itemId" value="'+data.itemId+'" hidden>\n' +
+                '                   <input type="text" class="form-control"  name="itemId" id="itemId" value="'+data.id+'" hidden>\n' +
                 '               </div>\n' +
                 '               <div class="form-group">\n' +
                 '                   <label for="name">Item Name:</label>\n' +
@@ -107,7 +114,7 @@
                         tabdate.push({
                             no:i + 1,
                             id:item.id,
-                            name:item.task_name,
+                            name:item.name,
                         })
 
                     });
@@ -124,7 +131,8 @@
                             {  "data": null,
                                 "defaultContent": "<button class='btn btn-info btn-sm' id='btn1' value='{id}'>Edit</button> <button class='btn btn-danger btn-sm' id='btn2'>Delete</button>"
                             },
-                        ]
+                        ],
+
                     });
 
                 }
@@ -139,6 +147,7 @@
             var ids =  $('#table').DataTable().row(id).data();
             var final=ids["id"]
             seledit(final);
+            alert(final)
 
 
         });
@@ -178,11 +187,15 @@
             });
         }
     function addbtn(){
+
         $("#add").on("click",function (e) {
+
+
             e.preventDefault();
             console.log("btn1");
+
             var formdata={
-                itemId:$("#itemId").val(),
+                id:"",
                 name:$("#name").val(),
             }
             console.log(formdata);
@@ -208,19 +221,20 @@
                 a.preventDefault();
                 console.log("btn2");
                 var formdata={
-                    itemId:$("#itemId").val(),
+                    id:$("#itemId").val(),
                     name:$("#name").val(),
                 }
                 console.log(formdata);
                  $.ajax({
-                     url: '/EditItem/'+formdata.itemId,
+                     url: '/EditItem/'+formdata.id,
                      type: "POST",
                      data:JSON.stringify(formdata),
                      contentType:'application/json',
                      success: function (data) {
-                         if(data=="ok"){
+                         if(data=="success"){
                              alert("Success");
                              list()
+
                              loadformADD()
                          }
 

@@ -9,7 +9,7 @@ public class TodoList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name="task_name")
     private String name;
 
